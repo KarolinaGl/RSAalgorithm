@@ -2,6 +2,10 @@ def int_from_bytes(xbytes: bytes) -> int:
     return int.from_bytes(xbytes, 'little')
 
 
+def int_to_bytes(x: int) -> bytes:
+    return x.to_bytes((x.bit_length() + 7) // 8, 'little')
+
+
 def egcd(a, b):
     if a == 0:
         return (b, 0, 1)
@@ -16,7 +20,3 @@ def modinv(a, m):
         raise Exception('modular inverse does not exist')
     else:
         return x % m
-
-
-def int_to_bytes(x: int) -> bytes:
-    return x.to_bytes((x.bit_length() + 7) // 8, 'little')

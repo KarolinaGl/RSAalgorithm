@@ -8,9 +8,7 @@ from rsa_algorithm import RsaAlgorithm
 
 from utilities import int_from_bytes, modinv, int_to_bytes
 
-
 BITS_IN_BYTE = 8
-
 
 PublicKey = namedtuple('PublicKey', ['n', 'e'])
 PrivateKey = namedtuple('PrivateKey', ['n', 'e', 'd', 'p', 'q'])
@@ -21,23 +19,17 @@ def bytes2int(raw_bytes: bytes) -> int:
 
 
 def int2bytes(number: int) -> bytes:
-    bytes_required = max(1, math.ceil(number.bit_length() / 8))
+    bytes_required = max(1, math.ceil(number.bit_length() / BITS_IN_BYTE))
     return number.to_bytes(bytes_required, 'big')
 
 
 class OwnRsa(RsaAlgorithm):
     def generate_key(self, n_bit_range):
         p, q = self._generate_p_q(n_bit_range)
-        # print(p, q)
         n = p * q
-        print(n.bit_length())
         euler = (p - 1) * (q - 1)
-        # print(f"n= {n}")
-        e = self._random_coprime((euler.bit_length() - 1) // 8, euler)
-        # print(euler.bit_length(), e.bit_length())
-        # print(f"e= {e}")
+        e = self._random_coprime((euler.bit_length() - 1) // BITS_IN_BYTE, euler)
         d = modinv(e, euler)
-        # print(f"d= {d.bit_length()}")
         public_key = PublicKey(n, e)
         private_key = PrivateKey(n, e, d, p, q)
         return public_key, private_key

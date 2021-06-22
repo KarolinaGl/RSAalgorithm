@@ -1,4 +1,4 @@
-from skimage.io import imread, imshow
+from skimage.io import imread
 
 from constants import *
 
@@ -50,20 +50,20 @@ class BmpFile:
             else:
                 print(f"{key} = {attribute_value}")
 
-    def save_encrypted_file(self, split_method):
+    def save_encrypted_file(self, split_method, file_name):
         encrypted_data = split_method.encrypt(self.get_image_data())
         self._set_new_bitmap_data_size(len(encrypted_data))
         image_header = self.get_image_header()
         image_footer = self.get_image_footer()
-        with open("encrypted_file.bmp", "wb") as file:
+        with open(file_name, "wb") as file:
             file.write(image_header + encrypted_data + image_footer)
 
-    def save_decrypted_file(self, split_method):
+    def save_decrypted_file(self, split_method, file_name):
         decrypted_data = split_method.decrypt(self.get_image_data())
         self._set_new_bitmap_data_size(len(decrypted_data))
         image_header = self.get_image_header()
         image_footer = self.get_image_footer()
-        with open("decrypted_file.bmp", "wb") as file:
+        with open(file_name, "wb") as file:
             file.write(image_header + decrypted_data + image_footer)
 
     def open_file(self):

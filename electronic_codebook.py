@@ -6,9 +6,12 @@ BITS_IN_BYTE = 8
 
 
 class ElectronicCodebook:
-    def __init__(self, algorithm: RsaAlgorithm, block_length_in_bytes: int):
+    def __init__(self, algorithm: RsaAlgorithm, block_length_in_bytes: int, key_pair=None):
         self.algorithm = algorithm
-        self.public_key, self._private_key = self.algorithm.generate_key(block_length_in_bytes * BITS_IN_BYTE + 1)
+        if key_pair is None:
+            self.public_key, self._private_key = self.algorithm.generate_key(block_length_in_bytes * BITS_IN_BYTE + 1)
+        else:
+            self.public_key, self._private_key = key_pair
         self.block_length_in_bytes = block_length_in_bytes
         self.encrypted_block_length_in_bytes = self._round_up_to_bytes(self.public_key.n.bit_length())
 
